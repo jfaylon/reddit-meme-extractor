@@ -24,9 +24,9 @@ export const TelegramSender = (botToken: string): DocumentSender => {
             caption: `The top posts from ${subreddit} on ${date}`,
           },
         );
-        console.log("Document sent successfully via Telegram");
+        logger.info("Document sent successfully via Telegram");
       } catch (error) {
-        console.error(
+        logger.error(
           "Error sending document via Telegram:",
           (error as Error).message,
         );

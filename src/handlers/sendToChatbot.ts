@@ -29,7 +29,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     // TODO: DOWNLOAD PDF FROM S3
     // For now, we will generate the PDF again and send it to the chatbot
     const topPosts = await RedditPost.find({ subreddit, capturedAt: date });
-    console.log("Top posts:", topPosts);
+    logger.info("Top posts:", topPosts);
     const pdfBuffer = await generatePdf(
       formatDate(new Date(date), "dd-MMM-yyyy"),
       topPosts,
@@ -51,7 +51,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       body: JSON.stringify({ message: "Message sent to chatbot", response }),
     };
   } catch (error) {
-    console.error("Error occurred:", error);
+    logger.error("Error occurred:", error);
 
     // Handle custom errors
     if (error instanceof BadRequestError) {

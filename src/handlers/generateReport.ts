@@ -18,7 +18,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     }
 
     const topPosts = await RedditPost.find({ subreddit, capturedAt: date });
-    console.log("Top posts:", topPosts);
+    logger.info("Top posts:", topPosts);
     // Create a PDF document
     const pdfBuffer = await generatePdf(
       formatDate(new Date(date), "dd-MMM-yyyy"),
@@ -37,7 +37,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       isBase64Encoded: true,
     };
   } catch (error) {
-    console.error("Error generating PDF:", error);
+    logger.error("Error generating PDF:", error);
     if (error instanceof BadRequestError) {
       return {
         statusCode: error.statusCode,

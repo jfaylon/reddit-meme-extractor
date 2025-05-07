@@ -1,18 +1,17 @@
 import { createLogger, format, transports } from "winston";
 
 declare global {
-  var logger: ReturnType<typeof createLogger>; // runtime
+  var logger: ReturnType<typeof createLogger>;
   interface GlobalThis {
-    logger: ReturnType<typeof createLogger>; // type-safe globalThis.logger
+    logger: ReturnType<typeof createLogger>; 
   }
 }
 
-// Create a Winston logger instance
 const logger = createLogger({
-  level: "info", // Default log level
+  level: "info", 
   format: format.combine(
-    format.colorize(), // Add colors to the output
-    format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), // Add timestamps
+    format.colorize(),
+    format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), 
     format.printf(({ timestamp, level, message }) => {
       return `[${timestamp}] ${level}: ${message}`;
     }),
@@ -23,7 +22,6 @@ const logger = createLogger({
   ],
 });
 
-// Attach the logger to the global object
 global.logger = logger;
 
 export default logger;

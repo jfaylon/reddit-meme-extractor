@@ -42,12 +42,12 @@ export const fetchTopPosts = async (
     .limit(limit);
 
   if (existingTopPosts.length > 0) {
-    console.log("Returning cached posts from the database");
+    logger.info("Returning cached posts from the database");
     return existingTopPosts;
   }
 
   if (date !== format(new Date(), "yyyy-MM-dd")) {
-    console.log(
+    logger.info(
       "Date does not match today's date. Returning cached posts only.",
     );
     return existingTopPosts;
@@ -56,15 +56,15 @@ export const fetchTopPosts = async (
   let url: string;
   const headers: Record<string, string> = {};
   if (clientId && clientSecret) {
-    console.log("Using Reddit API with OAuth");
+    logger.info("Using Reddit API with OAuth");
     const accessToken = await getAccessToken();
     url = `https://oauth.reddit.com/r/${subreddit}/top?limit=${limit}&t=day`;
     headers["Authorization"] = `Bearer ${accessToken}`;
   } else {
-    console.log("Using public Reddit API");
+    logger.info("Using public Reddit API");
     url = `https://www.reddit.com/r/${subreddit}/top.json?limit=${limit}&t=day`;
   }
-  console.log("Fetching posts from URL:", url);
+  logger.info("Fetching posts from URL:", url);
   const response = await axios.get(url, { headers });
   const capturedAt = format(new Date(), "yyyy-MM-dd");
   const posts = response.data.data.children.map((post: any) => {
@@ -103,6 +103,6 @@ export const fetchTopPosts = async (
   }
 
   await RedditPost.insertMany(sortedPosts);
-  console.log("Saved new posts to the database");
+  logger.info("Saved new posts to the database");
   return posts;
 };

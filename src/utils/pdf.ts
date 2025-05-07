@@ -8,7 +8,6 @@ export const generatePdf = async (
 ): Promise<Buffer> => {
   const pdfDoc = new PDFDocument({ margin: 50, size: "A4" });
 
-  // Wrap the PDF generation in a Promise
   const pdfBuffer = await new Promise<Buffer>((resolve, reject) => {
     const chunks: Buffer[] = [];
     pdfDoc.on("data", (chunk: Buffer) => {
@@ -17,7 +16,6 @@ export const generatePdf = async (
     pdfDoc.on("end", () => resolve(Buffer.concat(chunks)));
     pdfDoc.on("error", (error: Error) => reject(error));
 
-    // Add title
     pdfDoc
       .fontSize(24)
       .text(`Top Reddit Posts Report ${date}`, { align: "center" });
@@ -27,9 +25,8 @@ export const generatePdf = async (
     const marginBottom = 50;
     (async () => {
       for (const [index, post] of topPosts.entries()) {
-        // Check if the group fits on the current page
         if (pdfDoc.y + 100 > pageHeight - marginBottom) {
-          pdfDoc.addPage(); // Add a new page if the group doesn't fit
+          pdfDoc.addPage();
         }
 
         pdfDoc.fillColor("black");
@@ -68,14 +65,12 @@ export const generatePdf = async (
             });
             pdfDoc.moveDown();
           } catch (error) {
-            console.error("Failed to load image:", error);
+            logger.error("Failed to load image:", error);
           }
         }
 
         pdfDoc.moveDown();
       }
-
-      // Finalize the PDF
       pdfDoc.end();
     })();
   });

@@ -30,14 +30,14 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       const currentDate = new Date();
       formattedDate = format(currentDate, "yyyy-MM-dd");
     }
-    console.log("Formatted date:", formattedDate);
+    logger.info("Formatted date:", formattedDate);
     const data = await fetchTopPosts(subreddit, limit, formattedDate);
     return {
       statusCode: 200,
       body: JSON.stringify(data),
     };
   } catch (error) {
-    console.error("Error fetching posts:", error);
+    logger.error("Error fetching posts:", error);
 
     if (error instanceof BadRequestError) {
       return {
