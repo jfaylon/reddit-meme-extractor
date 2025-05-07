@@ -14,7 +14,7 @@ A serverless application to extract and persist memes from Reddit, with support 
 | Telegram Bot API      | Bot API v6+    |
 
 ### Note
-- This repository utilises the serverless-offline plugin to run the application
+- This repository utilises the `serverless-offline` plugin to simulate AWS API Gateway + Lambda locally during development. No actual AWS resources are deployed.
 
 ---
 
@@ -126,7 +126,7 @@ Create a \`.env\` file:
 PORT=8000
 REDDIT_CLIENT_ID=
 REDDIT_CLIENT_SECRET=
-MONGODB_URI=mongodb://localhost:27017/?replicaSet=rs0
+MONGODB_URI=mongodb://localhost:27017/?replicaSet=rs0 
 MONGODB_DATABASE=redditPosts
 TELEGRAM_MEME_BOT_TOKEN=
 TELEGRAM_MEME_CHAT_ID=
@@ -203,7 +203,6 @@ GET /reddit/memes
   {
     "title": "Funny meme",
     "author": "author",
-    "url": "https://i.redd.it/example.jpg",
     "score": 1234,
     "url": "https://reddit.com/r/memes/comments/abc123/funny_meme/",
     "rank": 1,
@@ -316,6 +315,8 @@ POST /reddit/memes/pdf/chatbot
 - The system takes a snapshot of the day's top results at the time the client requests for it and saves it into the database. Changes throughout the day may not be saved.
 - Using serverless@3 does not require a login.
 - Telegram and Reddit accounts and their keys and secrets are needed to be created.
+- While web crawling is against Reddit's Terms of Service (TOS), this project uses the official Reddit API to retrieve data. Two methods are available: unauthenticated (public) requests or authenticated requests using a client ID and secret. It is recommended to use authenticated requests to reduce risk of rate limiting or request blocking.
+
 
 ## Possible Improvements
 - Based on the assumption of the snapshot saving. The system can create a cronjob to retrieve/update the results with fixed intervals
