@@ -19,7 +19,6 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
     const topPosts = await RedditPost.find({ subreddit, capturedAt: date });
     logger.info("Top posts:", topPosts);
-    // Create a PDF document
     const pdfBuffer = await generatePdf(
       formatDate(new Date(date), "dd-MMM-yyyy"),
       topPosts,
