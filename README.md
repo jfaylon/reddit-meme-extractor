@@ -11,7 +11,7 @@ A serverless application to extract and persist memes from Reddit, with support 
 | TypeScript            | 5.x            |
 | AWS Lambda runtime    | nodejs22.x     |
 | MongoDB (replica set) | 7.x (Docker)   |
-| Telegram Bot API      | Bot API v6+    |
+| Telegram Bot Framework | Telegraf 4.x   |
 
 ### Note
 - This repository utilises the `serverless-offline` plugin to simulate AWS API Gateway + Lambda locally during development. No actual AWS resources are deployed.
