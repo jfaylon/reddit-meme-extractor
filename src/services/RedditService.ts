@@ -1,6 +1,6 @@
 import axios from "axios";
 import qs from "qs";
-import RedditPost from "../models/RedditPost";
+import RedditPost, { RedditPostInterface } from "../models/RedditPost";
 import { decode } from "html-entities";
 import { format } from "date-fns";
 
@@ -34,14 +34,22 @@ export const fetchTopPosts = async (
   startDate.setUTCHours(0, 0, 0, 0); // Start of the day
   const endDate = new Date(date);
   endDate.setUTCHours(23, 59, 59, 999);
-
   const existingTopPosts = await RedditPost.find({
     subreddit,
-    capturedAt: { $gte: startDate, $lte: endDate },
-  }).limit(limit);
+    capturedAt: date,
+  })
+    .sort({ score: -1 })
+    .limit(limit);
 
   if (existingTopPosts.length > 0) {
     console.log("Returning cached posts from the database");
+    return existingTopPosts;
+  }
+
+  if (date !== format(new Date(), "yyyy-MM-dd")) {
+    console.log(
+      "Date does not match today's date. Returning cached posts only.",
+    );
     return existingTopPosts;
   }
 
@@ -77,7 +85,7 @@ export const fetchTopPosts = async (
       subreddit: post.data.subreddit,
       title: post.data.title,
       author: post.data.author,
-      url: decode(post.data.url), // Decode the main post URL
+      url: decode(`https://reddit.com${post.data.permalink}`), // Decode the main post URL
       score: post.data.score,
       createdAt: new Date(post.data.created_utc * 1000), // Convert Unix timestamp to Date
       images: images || [], // Handle cases where images might be undefined
@@ -86,7 +94,15 @@ export const fetchTopPosts = async (
     };
   });
 
-  await RedditPost.insertMany(posts);
+  const sortedPosts = posts.sort(
+    (a: RedditPostInterface, b: RedditPostInterface) => b.score - a.score,
+  );
+
+  for (let i = 0; i < sortedPosts.length; i++) {
+    sortedPosts[i].rank = i + 1;
+  }
+
+  await RedditPost.insertMany(sortedPosts);
   console.log("Saved new posts to the database");
   return posts;
 };

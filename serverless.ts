@@ -14,7 +14,7 @@ const serverlessConfiguration: AWS = {
       minimumCompressionSize: 1024,
     },
     environment: {
-      PORT: process.env.PORT || "3000",
+      PORT: process.env.PORT || "8000",
       REDDIT_CLIENT_ID: process.env.REDDIT_CLIENT_ID || "",
       REDDIT_CLIENT_SECRET: process.env.REDDIT_CLIENT_SECRET || "",
     },
@@ -31,10 +31,43 @@ const serverlessConfiguration: AWS = {
         },
       ],
     },
+    getSubredditHistoryDates: {
+      handler: "src/handlers/getSubredditHistoryDates.handler",
+      events: [
+        {
+          httpApi: {
+            method: "get",
+            path: "/reddit/{subreddit}/dates",
+          },
+        },
+      ],
+    },
+    generateReport: {
+      handler: "src/handlers/generateReport.handler",
+      events: [
+        {
+          httpApi: {
+            method: "get",
+            path: "/reddit/{subreddit}/pdf",
+          },
+        },
+      ],
+    },
+    sendDocumentToChatbot: {
+      handler: "src/handlers/sendToChatbot.handler",
+      events: [
+        {
+          httpApi: {
+            method: "post",
+            path: "/reddit/{subreddit}/pdf/chatbot",
+          },
+        },
+      ],
+    },
   },
   custom: {
     "serverless-offline": {
-      httpPort: process.env.PORT || 3000,
+      httpPort: process.env.PORT || 8000,
     },
   },
 };
