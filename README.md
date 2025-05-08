@@ -11,6 +11,7 @@ A serverless application to extract and persist memes from Reddit, with support 
 | TypeScript            | 5.x            |
 | AWS Lambda runtime    | nodejs22.x     |
 | MongoDB (replica set) | 7.x (Docker)   |
+| Docker                | 24.x                     |
 | Telegram Bot Framework | Telegraf 4.x   |
 
 ### Note
@@ -27,6 +28,11 @@ Built for AWS Lambda with the Serverless Framework, using TypeScript.
 ---
 
 ## Setup Instructions
+
+### Prerequisite
+
+- **Docker** installed and running (required for MongoDB replica set)
+- Download Docker: [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
 
 ### 1. Clone the repository
 
