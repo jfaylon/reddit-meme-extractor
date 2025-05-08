@@ -134,6 +134,14 @@ TELEGRAM_MEME_CHAT_ID=
 
 Alternatively export variables manually.
 
+OR
+
+Copy the .env.example file to become .env
+
+```bash
+cp .env.example .env
+```
+
 ---
 
 ## Running the application
